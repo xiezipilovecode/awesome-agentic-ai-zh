@@ -1,0 +1,13 @@
+app:
+  name: my-app
+  version: 1.0.0
+  debug: false
+server:
+  host: localhost
+  port: 9090
+database:
+  driver: mysql
+  host: 127.0.0.1
+  port: 3306
+  user: admin
+  password: secret123
