@@ -1,0 +1,51 @@
+LLM Powered Autonomous Agents
+
+Date: June 23, 2023
+Author: Lilian Weng
+
+Building agents with LLM (large language model) as its core controller is a cool concept. Several proof-of-concepts demos, such as AutoGPT, GPT-Engineer and BabyAGI, serve as inspiring examples. The potentiality of LLM extends beyond generating well-written copies, stories, essays and programs; it can be framed as a powerful general problem solver.
+
+Agent System Overview
+
+In a LLM-powered autonomous agent system, LLM functions as the agent's brain, complemented by several key components:
+
+1. Planning
+- Subgoal and decomposition: The agent breaks down large tasks into smaller, manageable subgoals, enabling efficient handling of complex tasks.
+- Reflection and refinement: The agent can do self-criticism and self-reflection over past actions, learn from mistakes and refine them for future steps, thereby improving the quality of final results.
+
+2. Memory
+- Short-term memory: I would consider all the in-context learning (See Prompt Engineering) as utilizing short-term memory of the model to learn.
+- Long-term memory: This provides the agent with the capability to retain and recall (infinite) information over extended periods, often by leveraging an external vector store and fast retrieval.
+
+3. Tool use
+- The agent learns to call external APIs for extra information that is missing from the model weights (often hard to change after pre-training), including current information, code execution capability, access to proprietary information sources and more.
+
+Planning: Task Decomposition
+
+Chain of thought (CoT) has become a standard prompting technique for enhancing model performance on complex tasks. The model is instructed to "think step by step" to utilize more test-time computation to decompose hard tasks into smaller and simpler steps. CoT transforms big tasks into multiple manageable tasks and shed lights into an interpretation of the model's thinking process.
+
+Tree of Thoughts (Yao et al. 2023) extends CoT by exploring multiple reasoning possibilities at each step. It first decomposes the problem into multiple thought steps and generates multiple thoughts per step, creating a tree structure. The search process can be BFS (breadth-first search) or DFS (depth-first search) with each state evaluated by a classifier (via a prompt) or majority vote.
+
+Memory: Short-term and Long-term
+
+Short-term memory is limited by the context window size. The maximum context length varies across different LLMs. For example, GPT-4 has up to 32K tokens, while GPT-4-32K can handle up to 32K tokens context length.
+
+Long-term memory is implemented via external vector storage. The key idea is to store information in a vector database and retrieve the most relevant pieces when needed. This is essentially Retrieval-Augmented Generation (RAG).
+
+The typical workflow:
+1. Split documents into chunks
+2. Compute embeddings for each chunk
+3. Store embeddings in a vector database
+4. At query time, compute query embedding
+5. Retrieve most similar chunks
+6. Feed retrieved context + query to the LLM
+
+Tool Use
+
+MRKL (Modular Reasoning, Knowledge and Language) is a neuro-symbolic architecture for autonomous agents. A MRKL system contains a collection of "expert" modules and the LLM acts as a router to route queries to the most suitable expert module.
+
+Function calling is another important capability. OpenAI's function calling allows the model to generate structured JSON outputs that can be used to invoke external APIs. The model is fine-tuned to detect when a function should be called and to produce JSON conforming to the function's signature.
+
+Conclusion
+
+The journey of building autonomous agents with LLMs is an exciting frontier. By combining planning, memory, and tool use, we can create systems that are more capable, reliable, and useful for real-world applications.
